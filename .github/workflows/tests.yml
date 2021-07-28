@@ -1,0 +1,16 @@
+name: Run Linux Tests
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+
+      - name: run tests
+        run: |
+          go test ./...
