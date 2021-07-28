@@ -2,10 +2,14 @@ name: Run Linux Tests
 
 on:
   push:
-    branches: main
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
