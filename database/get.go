@@ -69,3 +69,72 @@ func (db *DB) GetAllOld() (result []Node, err error) {
 	}
 	return result, nil
 }
+
+// GetPoolSize return the sum the nodes total space and used space.
+func (db *DB) GetPoolSize() (total float64, used float64, err error) {
+	// Attempt to grab lock.
+	db.lock.Lock()
+	defer db.lock.Unlock()
+	// Ping database to check that it still exists.
+	err = db.conn.Ping()
+	if err != nil {
+		return total, used, err
+	}
+	// Get total pool size from sum of nodes reported values.
+	row, err := db.conn.Query("SELECT SUM(total_space) FROM nodes")
+	if err != nil {
+		return total, used, err
+	}
+	defer row.Close()
+	if !row.Next() {
+		return total, used, sql.ErrNoRows
+	}
+	err = row.Scan(&total)
+	if err != nil {
+		return total, used, err
+	}
+	err = row.Close()
+	if err != nil {
+		return total, used, err
+	}
+	// Get used pool size from sum of nodes reported values.
+	row, err = db.conn.Query("SELECT SUM(used_space) FROM nodes")
+	if err != nil {
+		return total, used, err
+	}
+	defer row.Close()
+	if !row.Next() {
+		return total, used, sql.ErrNoRows
+	}
+	err = row.Scan(&used)
+	if err != nil {
+		return total, used, err
+	}
+	return total, used, nil
+}
+
+// GetNodesOnline calculates the number of nodes reporting to the database.
+func (db *DB) GetNodesOnline() (nodes int, err error) {
+	// Attempt to grab lock.
+	db.lock.Lock()
+	defer db.lock.Unlock()
+	// Ping database to check that it still exists.
+	err = db.conn.Ping()
+	if err != nil {
+		return -1, err
+	}
+	// Get total number of nodes reporting.
+	row, err := db.conn.Query("SELECT COUNT(id) FROM nodes")
+	if err != nil {
+		return -1, err
+	}
+	defer row.Close()
+	if !row.Next() {
+		return nodes, sql.ErrNoRows
+	}
+	err = row.Scan(&nodes)
+	if err != nil {
+		return -1, err
+	}
+	return nodes, nil
+}

@@ -42,7 +42,6 @@ func Open(path string) (result *DB, err error) {
 			used_space REAL,
 			last_seen DATETIME,
 			first_seen DATETIME,
-			
 			PRIMARY KEY(id)
 		);`,
 	)

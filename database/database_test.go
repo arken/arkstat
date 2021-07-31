@@ -3,10 +3,9 @@ package database
 import (
 	"database/sql"
 	"sync"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
+// OpenMock opens up a mock DB for unit testing purposes.
 func openMock() (result *DB, err error) {
 	db, err := sql.Open("sqlite3", ":memory:")
 	if err != nil {
