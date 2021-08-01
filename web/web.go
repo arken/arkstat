@@ -10,7 +10,7 @@ import (
 
 var global *stats.Stats
 
-func Start(main *stats.Stats) {
+func Start(addr string, main *stats.Stats) {
 	global = main
 	// Setup Chi Router
 	r := chi.NewRouter()
@@ -18,5 +18,5 @@ func Start(main *stats.Stats) {
 	// Setup handler functions for api endpoints
 	r.Get("/usage", handleUsage)
 	// Start http server and listen for incoming connections
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(addr, r)
 }
