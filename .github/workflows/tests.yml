@@ -11,6 +11,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/autamus/go:latest
     steps:
       - name: setup go
         uses: actions/setup-go@v2
