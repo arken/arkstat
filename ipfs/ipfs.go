@@ -10,6 +10,7 @@ import (
 	"github.com/ipfs/go-ipfs/core"
 	"github.com/ipfs/go-ipfs/core/coreapi" // This package is needed so that all the preloaded plugins are loaded automatically.
 	libp2p "github.com/ipfs/go-ipfs/core/node/libp2p"
+	"github.com/ipfs/go-ipfs/plugin/loader"
 	"github.com/ipfs/go-ipfs/repo"
 	"github.com/ipfs/go-ipfs/repo/fsrepo"
 	migrate "github.com/ipfs/go-ipfs/repo/fsrepo/migrations"
@@ -19,6 +20,7 @@ import (
 )
 
 type NodeConfArgs struct {
+	Addr           string
 	PeerID         string
 	PrivKey        string
 	SwarmKey       string
@@ -43,6 +45,10 @@ func CreateNode(repoPath string, args NodeConfArgs) (node *Node, err error) {
 		PeerID:  args.PeerID,
 		PrivKey: args.PrivKey,
 	}
+	// Setup IPFS plugins
+	if err := setupPlugins(repoPath); err != nil {
+		return nil, err
+	}
 	// Initialize node structure
 	node = &Node{}
 	// Create IPFS node
@@ -57,7 +63,7 @@ func CreateNode(repoPath string, args NodeConfArgs) (node *Node, err error) {
 	// Open the repo
 	fs, err := openFs(node.ctx, repoPath)
 	if err != nil {
-		err = createFs(node.ctx, repoPath, id, args.BootstrapPeers)
+		err = createFs(node.ctx, repoPath, args.Addr, id, args.BootstrapPeers)
 		if err != nil {
 			return nil, err
 		}
@@ -97,7 +103,7 @@ func openFs(ctx context.Context, repoPath string) (result repo.Repo, err error) 
 }
 
 // createFs builds the IPFS configuration repository.
-func createFs(ctx context.Context, path string, id ipfsConfig.Identity, bootstrapPeers []string) (err error) {
+func createFs(ctx context.Context, path, addr string, id ipfsConfig.Identity, bootstrapPeers []string) (err error) {
 	// Check if directory to configuration exists
 	if _, err = os.Stat(path); os.IsNotExist(err) {
 		os.MkdirAll(path, os.ModePerm)
@@ -114,6 +120,9 @@ func createFs(ctx context.Context, path string, id ipfsConfig.Identity, bootstra
 	cfg.Bootstrap = bootstrapPeers
 	cfg.Swarm.ConnMgr.HighWater = 1200
 	cfg.Swarm.ConnMgr.LowWater = 1000
+	if addr != "" {
+		cfg.Addresses = ipfsConfig.Addresses{Announce: []string{addr}}
+	}
 
 	// Create the repo with the ipfsConfig
 	err = fsrepo.Init(path, cfg)
@@ -138,4 +147,23 @@ func createSwarmKey(path string, key string) (err error) {
 		_, err = file.WriteString("/key/swarm/psk/1.0.0/\n/base16/\n" + key)
 	}
 	return err
+}
+
+func setupPlugins(externalPluginsPath string) error {
+	// Load any external plugins if available on externalPluginsPath
+	plugins, err := loader.NewPluginLoader(filepath.Join(externalPluginsPath, "plugins"))
+	if err != nil {
+		return fmt.Errorf("error loading plugins: %s", err)
+	}
+
+	// Load preloaded and external plugins
+	if err := plugins.Initialize(); err != nil {
+		return fmt.Errorf("error initializing plugins: %s", err)
+	}
+
+	if err := plugins.Inject(); err != nil {
+		return fmt.Errorf("error initializing plugins: %s", err)
+	}
+
+	return nil
 }

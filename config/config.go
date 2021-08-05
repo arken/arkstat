@@ -55,6 +55,7 @@ type ipfs struct {
 	Path       string
 	PrivateKey string
 	PeerID     string
+	Addr       string
 }
 
 func init() {
@@ -79,6 +80,7 @@ func init() {
 				Path:       filepath.Join(home, ".config", "arkstat", "ipfs"),
 				PeerID:     "",
 				PrivateKey: "",
+				Addr:       "",
 			},
 		},
 	)

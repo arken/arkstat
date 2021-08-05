@@ -19,6 +19,7 @@ func main() {
 	}
 	// Setup IPFS Node
 	node, err := ipfs.CreateNode(config.Global.Ipfs.Path, ipfs.NodeConfArgs{
+		Addr:           config.Global.Ipfs.Addr,
 		PeerID:         config.Global.Ipfs.PeerID,
 		PrivKey:        config.Global.Ipfs.PrivateKey,
 		SwarmKey:       config.Manifest.ClusterKey,

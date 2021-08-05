@@ -9,11 +9,15 @@ import (
 )
 
 func Start(db *database.DB, stats *stats.Stats) {
-	for range time.Tick(time.Minute * 5) {
+	ticker := time.NewTicker(5 * time.Minute)
+	for {
 		// Calculate the pool usage statistics.
 		err := calculateUsage(db, &stats.Usage)
 		if err != nil {
 			log.Println(err)
 		}
+
+		// Wait for ticker
+		<-ticker.C
 	}
 }

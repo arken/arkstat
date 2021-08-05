@@ -1,11 +1,11 @@
 package ipfs
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/arken/arkstat/database"
 	"github.com/libp2p/go-libp2p-core/network"
-	"github.com/polydawn/refmt/json"
 )
 
 type report struct {
@@ -17,10 +17,15 @@ type report struct {
 func BuildStatsHandler(db *database.DB) network.StreamHandler {
 	return func(stream network.Stream) {
 		defer stream.Close()
-		// Create report and write read json input into struct
+		// Create report and json input into struct
 		r := report{}
-		u := json.NewUnmarshaller(stream)
-		err := u.Unmarshal(&r)
+		buf := make([]byte, 128)
+		n, err := stream.Read(buf)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		err = json.Unmarshal(buf[:n], &r)
 		if err != nil {
 			return
 		}
@@ -38,5 +43,6 @@ func BuildStatsHandler(db *database.DB) network.StreamHandler {
 		if err != nil {
 			log.Printf("IPFS Handler <--> DB - %s", err)
 		}
+		log.Printf("Received Stats from Node: %s", stream.Conn().RemotePeer().Pretty())
 	}
 }
