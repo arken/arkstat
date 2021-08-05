@@ -121,7 +121,7 @@ func createFs(ctx context.Context, path, addr string, id ipfsConfig.Identity, bo
 	cfg.Swarm.ConnMgr.HighWater = 1200
 	cfg.Swarm.ConnMgr.LowWater = 1000
 	if addr != "" {
-		cfg.Addresses = ipfsConfig.Addresses{Announce: []string{addr}}
+		cfg.Addresses.Announce = []string{addr}
 	}
 
 	// Create the repo with the ipfsConfig
