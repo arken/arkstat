@@ -67,6 +67,10 @@ func CreateNode(repoPath string, args NodeConfArgs) (node *Node, err error) {
 		if err != nil {
 			return nil, err
 		}
+		fs, err = openFs(node.ctx, repoPath)
+		if err != nil {
+			return nil, err
+		}
 	}
 	// Construct the node
 	nodeOptions := &core.BuildCfg{
