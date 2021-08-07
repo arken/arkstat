@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/go-chi/chi/v5 v5.0.3
+	github.com/go-chi/cors v1.2.0
 	github.com/go-git/go-git/v5 v5.4.2
 	github.com/ipfs/go-ipfs v0.9.1
 	github.com/ipfs/go-ipfs-config v0.14.0
