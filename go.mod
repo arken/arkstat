@@ -10,6 +10,5 @@ require (
 	github.com/ipfs/interface-go-ipfs-core v0.4.0
 	github.com/libp2p/go-libp2p-core v0.8.5
 	github.com/mattn/go-sqlite3 v1.14.8
-	github.com/polydawn/refmt v0.0.0-20201211092308-30ac6d18308e
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 )
