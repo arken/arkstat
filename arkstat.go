@@ -16,11 +16,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// Setup Database
 	db, err := database.Open(config.Global.Database.Path)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// Setup IPFS Node
 	node, err := ipfs.CreateNode(config.Global.Ipfs.Path, ipfs.NodeConfArgs{
 		Addr:           config.Global.Ipfs.Addr,
@@ -32,11 +34,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	node.SetHandler("/arkstat/0.0.1", ipfs.BuildStatsHandler(db))
+
 	// Initialize Stats Structure
 	stats := stats.Stats{}
+
 	// Startup background tasks
 	go tasks.Start(db, &stats)
+
 	// Setup HTTP Server
 	web.Start(config.Global.Web.Addr, &stats)
 }

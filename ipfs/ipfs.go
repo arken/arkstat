@@ -76,7 +76,7 @@ func CreateNode(repoPath string, args NodeConfArgs) (node *Node, err error) {
 	nodeOptions := &core.BuildCfg{
 		Permanent: true,
 		Online:    true,
-		Routing:   libp2p.DHTOption,
+		Routing:   libp2p.DHTServerOption,
 		Repo:      fs,
 	}
 	node.node, err = core.NewNode(node.ctx, nodeOptions)
@@ -84,6 +84,7 @@ func CreateNode(repoPath string, args NodeConfArgs) (node *Node, err error) {
 		return nil, err
 	}
 	node.node.IsDaemon = true
+
 	// Attach the Core API to the constructed node
 	node.api, err = coreapi.NewCoreAPI(node.node)
 	return node, err
