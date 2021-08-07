@@ -36,8 +36,8 @@ func BuildStatsHandler(db *database.DB) network.StreamHandler {
 		peer := database.Node{
 			ID:         stream.Conn().RemotePeer().Pretty(),
 			Email:      r.Email,
-			TotalSpace: r.TotalSpace,
-			UsedSpace:  r.UsedSpace,
+			TotalSpace: r.TotalSpace / 1024,
+			UsedSpace:  r.UsedSpace / 1024,
 		}
 		err = db.Add(peer)
 		if err != nil {
