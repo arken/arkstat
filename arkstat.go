@@ -12,6 +12,10 @@ import (
 )
 
 func main() {
+	err := config.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
 	// Setup Database
 	db, err := database.Open(config.Global.Database.Path)
 	if err != nil {

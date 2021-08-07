@@ -1,7 +1,6 @@
 package config
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -58,8 +57,7 @@ type ipfs struct {
 	Addr       string
 }
 
-func init() {
-	var err error
+func Init() (err error) {
 	home, _ := os.UserHomeDir()
 	Global = parseConfigEnv(
 		&config{
@@ -85,9 +83,7 @@ func init() {
 		},
 	)
 	Manifest, err = parseConfigManifest(Global.manifest.Path, Global.manifest.Url)
-	if err != nil {
-		log.Fatal(err)
-	}
+	return err
 }
 
 func parseConfigEnv(input *config) (result config) {
