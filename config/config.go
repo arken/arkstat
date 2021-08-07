@@ -30,7 +30,7 @@ type config struct {
 	General  general
 	Database database
 	Ipfs     ipfs
-	Keyset   keyset
+	manifest manifest
 	Web      web
 }
 
@@ -42,7 +42,7 @@ type database struct {
 	Path string
 }
 
-type keyset struct {
+type manifest struct {
 	Url  string
 	Path string
 }
@@ -69,9 +69,9 @@ func init() {
 			Database: database{
 				Path: "arkstat.db",
 			},
-			Keyset: keyset{
-				Url:  "https://github.com/arken/core-keyset.git",
-				Path: filepath.Join(home, ".config", "arkstat", "keyset"),
+			manifest: manifest{
+				Url:  "https://github.com/arken/core-manifest.git",
+				Path: filepath.Join(home, ".config", "arkstat", "manifest"),
 			},
 			Web: web{
 				Addr: ":8080",
@@ -84,7 +84,7 @@ func init() {
 			},
 		},
 	)
-	Manifest, err = parseConfigManifest(Global.Keyset.Path, Global.Keyset.Url)
+	Manifest, err = parseConfigManifest(Global.manifest.Path, Global.manifest.Url)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -132,7 +132,7 @@ func parseConfigManifest(path, url string) (result manifestConfig, err error) {
 	if err != nil && err.Error() != "already up-to-date" {
 		return result, err
 	}
-	bytes, err := os.ReadFile(filepath.Join(Global.Keyset.Path, "config.yml"))
+	bytes, err := os.ReadFile(filepath.Join(Global.manifest.Path, "config.yml"))
 	if os.IsNotExist(err) {
 		return result, err
 	}
