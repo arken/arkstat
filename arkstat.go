@@ -6,6 +6,7 @@ import (
 	"github.com/arken/arkstat/config"
 	"github.com/arken/arkstat/database"
 	"github.com/arken/arkstat/ipfs"
+	"github.com/arken/arkstat/mail"
 	"github.com/arken/arkstat/stats"
 	"github.com/arken/arkstat/tasks"
 	"github.com/arken/arkstat/web"
@@ -35,7 +36,16 @@ func main() {
 		log.Fatal(err)
 	}
 
-	node.SetHandler("/arkstat/0.0.1", ipfs.BuildStatsHandler(db))
+	mailbox, err := mail.Init(config.Global.Mail.Domain,
+		config.Global.Mail.PrivateKey,
+		config.Global.Mail.Sender,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Setup Stats IPFS protocol handler
+	node.SetHandler("/arkstat/0.0.1", ipfs.BuildStatsHandler(db, mailbox))
 
 	// Initialize Stats Structure
 	stats := stats.Stats{}

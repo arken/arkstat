@@ -10,6 +10,7 @@ require (
 	github.com/ipfs/go-ipfs-config v0.14.0
 	github.com/ipfs/interface-go-ipfs-core v0.4.0
 	github.com/libp2p/go-libp2p-core v0.8.5
+	github.com/mailgun/mailgun-go/v4 v4.5.2
 	github.com/mattn/go-sqlite3 v1.14.8
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 )

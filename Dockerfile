@@ -28,6 +28,7 @@ RUN apt update && \
 WORKDIR /app
 
 COPY --from=builder /app/arkstat /app/arkstat
+COPY mail/templates /app/mail/templates
 
 # Command to run the executable
 ENTRYPOINT ["/app/arkstat"]

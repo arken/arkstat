@@ -29,7 +29,8 @@ type config struct {
 	General  general
 	Database database
 	Ipfs     ipfs
-	manifest manifest
+	Mail     mail
+	Manifest manifest
 	Web      web
 }
 
@@ -39,6 +40,12 @@ type general struct {
 
 type database struct {
 	Path string
+}
+
+type mail struct {
+	Domain     string
+	PrivateKey string
+	Sender     string
 }
 
 type manifest struct {
@@ -67,7 +74,7 @@ func Init() (err error) {
 			Database: database{
 				Path: "arkstat.db",
 			},
-			manifest: manifest{
+			Manifest: manifest{
 				Url:  "https://github.com/arken/core-manifest.git",
 				Path: filepath.Join(home, ".config", "arkstat", "manifest"),
 			},
@@ -82,7 +89,7 @@ func Init() (err error) {
 			},
 		},
 	)
-	Manifest, err = parseConfigManifest(Global.manifest.Path, Global.manifest.Url)
+	Manifest, err = parseConfigManifest(Global.Manifest.Path, Global.Manifest.Url)
 	return err
 }
 
@@ -128,7 +135,7 @@ func parseConfigManifest(path, url string) (result manifestConfig, err error) {
 	if err != nil && err.Error() != "already up-to-date" {
 		return result, err
 	}
-	bytes, err := os.ReadFile(filepath.Join(Global.manifest.Path, "config.yml"))
+	bytes, err := os.ReadFile(filepath.Join(Global.Manifest.Path, "config.yml"))
 	if os.IsNotExist(err) {
 		return result, err
 	}
