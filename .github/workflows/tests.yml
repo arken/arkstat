@@ -10,9 +10,10 @@ on:
 
 jobs:
   test:
+    name: Unit Tests
     runs-on: ubuntu-latest
     container:
-      image: go:alpine
+      image: golang:alpine
     steps:
       - name: setup go
         uses: actions/setup-go@v2
