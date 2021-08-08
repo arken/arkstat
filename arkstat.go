@@ -51,7 +51,7 @@ func main() {
 	stats := stats.Stats{}
 
 	// Startup background tasks
-	go tasks.Start(db, &stats)
+	go tasks.Start(db, &stats, mailbox)
 
 	// Setup HTTP Server
 	web.Start(config.Global.Web.Addr, &stats)
