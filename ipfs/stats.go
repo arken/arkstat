@@ -56,7 +56,9 @@ func BuildStatsHandler(db *database.DB, mailbox *mail.Mailbox) network.StreamHan
 		// Send confirmation email
 		if peer.Email != "" && mailbox != nil {
 			err = mailbox.Send("mail/templates/welcome.yml", peer.Email)
-			log.Println(err)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 	}
 }

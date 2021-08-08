@@ -3,7 +3,7 @@ body: |
   Hi!
 
   It's nice to meet you, I'm Arkstat! 👋 (A Monitoring System for the Arken Cluster.) Your Arken Node hasn't checked in within the last 24 hours. If this downtime was planned or you've shutdown your node, please disregard this message. If this downtime was not planned, your node may be offline for a couple of reasons.
-  - Maybe there was a recent power outage and your node didn't reboot sucessfully? (Try rebooting your node.)
+  - Maybe there was a recent power outage and your node didn't reboot successfully? (Try rebooting your node.)
   - Maybe your internet connection is offline?
   - Or it's possible either your computer or hard drive within the computer has failed.
 
