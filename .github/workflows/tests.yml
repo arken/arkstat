@@ -12,7 +12,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/autamus/go:latest
+      image: go:alpine
     steps:
       - name: setup go
         uses: actions/setup-go@v2
