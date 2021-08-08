@@ -46,6 +46,9 @@ func BuildStatsHandler(db *database.DB, mailbox *mail.Mailbox) network.StreamHan
 			UsedSpace:  r.UsedSpace / 1000,
 		}
 
+		// Check for existing record
+		prev, _ := db.Get(peer.ID)
+
 		// Add info to database
 		err = db.Add(peer)
 		if err != nil {
@@ -54,7 +57,7 @@ func BuildStatsHandler(db *database.DB, mailbox *mail.Mailbox) network.StreamHan
 		log.Printf("Received Stats from Node: %s", stream.Conn().RemotePeer().Pretty())
 
 		// Send confirmation email
-		if peer.Email != "" && mailbox != nil {
+		if prev.Email == "" && peer.Email != "" && mailbox != nil {
 			err = mailbox.Send("mail/templates/welcome.yml", peer.Email)
 			if err != nil {
 				log.Println(err)
