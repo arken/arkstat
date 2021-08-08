@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  linux-unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
     container:
