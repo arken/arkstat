@@ -1,13 +1,15 @@
 package tasks
 
 import (
+	"time"
+
 	"github.com/arken/arkstat/database"
 	"github.com/arken/arkstat/mail"
 )
 
 func cleanUpOldNodes(db *database.DB, mailbox *mail.Mailbox) (err error) {
 	// Grab a list of all of the old nodes in the DB not currently reporting.
-	oldNodes, err := db.GetAllOld()
+	oldNodes, err := db.GetAllOlderThan(time.Hour * 24)
 	if err != nil {
 		return err
 	}

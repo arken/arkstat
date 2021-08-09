@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"time"
 )
 
 // Get searches for and returns a the corresponding entry from the
@@ -41,7 +42,7 @@ func (db *DB) get(id string) (result Node, err error) {
 }
 
 // GetAllOld returns all of the old node entries in the database in a channel.
-func (db *DB) GetAllOld() (result []Node, err error) {
+func (db *DB) GetAllOlderThan(input time.Duration) (result []Node, err error) {
 	// Attempt to grab lock.
 	db.lock.Lock()
 	defer db.lock.Unlock()
@@ -50,8 +51,9 @@ func (db *DB) GetAllOld() (result []Node, err error) {
 	if err != nil {
 		return result, err
 	}
+	past := time.Now().Add(-1 * input)
 	// Query for nodes that have not check in within the last 24 hours.
-	rows, err := db.conn.Query("SELECT id, email FROM nodes WHERE last_seen < datetime('now', '-1 day')")
+	rows, err := db.conn.Query("SELECT id, email FROM nodes WHERE last_seen < ?", past)
 	if err != nil {
 		return result, err
 	}
