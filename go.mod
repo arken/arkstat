@@ -3,6 +3,7 @@ module github.com/arken/arkstat
 go 1.16
 
 require (
+	github.com/BurntSushi/toml v0.4.1
 	github.com/go-chi/chi/v5 v5.0.3
 	github.com/go-chi/cors v1.2.0
 	github.com/go-git/go-git/v5 v5.4.2
