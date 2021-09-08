@@ -7,7 +7,7 @@ if [ "$LITESTREAM_ACCESS_KEY_ID" != "" ]; then
     echo "      - url: $LITESTREAM_REPLICA_URL" >> /etc/litestream.yml
     echo "        retention: 24h" >> /etc/litestream.yml
     echo "        sync-interval: 1m" >> /etc/litestream.yml
-    litestream restore -if-replica-exists -v
+    litestream restore -if-replica-exists -v -o arkstat.db "$LITESTREAM_REPLICA_URL"
     litestream replicate -exec /app/arkstat
 else 
     /app/arkstat
