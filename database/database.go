@@ -43,7 +43,7 @@ func Open(path string) (result *DB, err error) {
 			last_seen DATETIME,
 			first_seen DATETIME,
 			PRIMARY KEY(id)
-		);`,
+		); PRAGMA busy_timeout = 5000;`,
 	)
 
 	result = &DB{
