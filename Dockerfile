@@ -31,11 +31,10 @@ COPY --from=builder /app/arkstat /app/arkstat
 COPY mail/templates /app/mail/templates
 COPY entrypoint.sh  /app/entrypoint.sh
 
-RUN wget https://github.com/benbjohnson/litestream/releases/download/v0.3.5/litestream-v0.3.5-linux-amd64.deb && \
-    dpkg -i litestream-v0.3.5-linux-amd64.deb
+RUN wget https://github.com/benbjohnson/litestream/releases/download/v0.3.7/litestream-v0.3.7-linux-amd64.deb && \
+    dpkg -i litestream-v0.3.7-linux-amd64.deb
 
 RUN chmod a+x /app/entrypoint.sh
-
 
 # Command to run the executable
 ENTRYPOINT ["/app/entrypoint.sh"]
