@@ -13,5 +13,5 @@ require (
 	github.com/libp2p/go-libp2p-core v0.11.0
 	github.com/mailgun/mailgun-go/v4 v4.6.0
 	github.com/mattn/go-sqlite3 v1.14.10
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+	gopkg.in/yaml.v3 v3.0.0
 )
